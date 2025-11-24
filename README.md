@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AgriLane - Smart Transportation & Farm-to-Customer Marketplace
 
 A complete web application connecting farms, transporters, and customers with intelligent route optimization and direct marketplace functionality.
@@ -123,3 +124,7 @@ This project is for educational purposes.
 ## 📞 Support
 
 For questions or issues, please create an issue in the repository.
+=======
+# AgriLane-MCA
+Smart Transportation &amp; Farm-to-Customer Marketplace
+>>>>>>> e5d724531b9511904be236d368ce09bbf5e737a0
