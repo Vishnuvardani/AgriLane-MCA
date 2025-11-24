@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "company": "Express Logistics",
+    "driver": "John Smith",
+    "vehicle": {
+      "type": "Truck",
+      "capacity": 5,
+      "licensePlate": "ABC-123"
+    },
+    "contact": "+1-555-0123",
+    "currentLoad": 3,
+    "status": "available",
+    "location": { "lat": 40.7128, "lng": -74.0060 },
+    "rating": 4.8
+  },
+  {
+    "id": 2,
+    "company": "Rural Transport Co.",
+    "driver": "Maria Garcia",
+    "vehicle": {
+      "type": "Van",
+      "capacity": 2,
+      "licensePlate": "XYZ-789"
+    },
+    "contact": "+1-555-0456",
+    "currentLoad": 2,
+    "status": "busy",
+    "location": { "lat": 40.7589, "lng": -73.9851 },
+    "rating": 4.6
+  }
+]

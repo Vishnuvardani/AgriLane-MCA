@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - AgriLane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+  --primary: #577656;
+  --secondary: #76A37E;
+  --accent: #2E4C3A;
+  --light: #E6F0E6;
+  --white: #ffffff;
+  --dark: #1a1a1a;
+  --shadow: rgba(87, 118, 86, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  background: var(--accent);
+  padding: 16px 0;
+  box-shadow: 0 2px 10px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  max-width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--light);
+}
+
+.features-hero {
+  background: transparent !important;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.features-hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #333 !important;
+}
+
+.features-hero p {
+  font-size: 20px;
+  opacity: 0.9;
+  color: #333 !important;
+}
+
+.features-section {
+  padding: 80px 0;
+  background: white;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 8px 30px rgba(87, 118, 86, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(87, 118, 86, 0.15);
+}
+
+.feature-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  color: var(--primary);
+  margin-bottom: 16px;
+  font-size: 24px;
+}
+
+.feature-card p {
+  color: var(--accent);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">
+                <img src="assets/images/logo.jpg" alt="AgriLane Logo" class="logo-img">
+                <span>AgriLane</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="features-hero">
+            <div class="container">
+                <h1>AgriLane Features</h1>
+                <p>Comprehensive solutions for modern agricultural transportation and marketplace</p>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🌾</div>
+                        <h3>Farm Management</h3>
+                        <p>Add, edit, and manage farm details. Track produce inventory and availability. Direct sales to customers with real-time stock updates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚛</div>
+                        <h3>Transportation Management</h3>
+                        <p>Manage transporters and vehicles. Capacity tracking and availability. Route assignment and history with performance monitoring.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛒</div>
+                        <h3>Direct Marketplace</h3>
+                        <p>Customer browsing and ordering. Real-time produce availability. Multiple delivery options with order tracking and notifications.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗺️</div>
+                        <h3>Route Optimization</h3>
+                        <p>AI-powered route planning. Multiple route options. Cost and time optimization with GPS export functionality.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛤️</div>
+                        <h3>Modular Road Deployment</h3>
+                        <p>Panel dimension configuration. Material composition (bamboo/plastic). Environmental impact analysis with cost estimation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>Delivery Tracking</h3>
+                        <p>Real-time delivery monitoring. Status updates and alerts. Performance metrics with customer notifications.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Analytics & Reports</h3>
+                        <p>Delivery success rates. Transporter workload analysis. Route efficiency metrics and environmental impact tracking.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Role-Based Access</h3>
+                        <p>Secure authentication system. Different dashboard views for each user type. Role-specific navigation and features.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <footer style="background: var(--accent); color: white; padding: 40px 0; text-align: center;">
+        <div class="container">
+            <p>&copy; 2025 AgriLane. Smart Transportation for Sustainable Agriculture.</p>
+        </div>
+    </footer>
+</body>
+</html>

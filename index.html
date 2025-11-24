@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLane - Smart Transportation & Farm-to-Customer Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+  --primary: #577656;
+  --secondary: #76A37E;
+  --accent: #2E4C3A;
+  --light: #E6F0E6;
+  --white: #ffffff;
+  --dark: #1a1a1a;
+  --shadow: rgba(87, 118, 86, 0.1);
+  --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --glass: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header .container {
+  padding: 0 16px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.header {
+  background: var(--accent);
+  padding: 16px 0;
+  box-shadow: 0 2px 10px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  max-width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--light);
+}
+
+.hero {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+  margin: 20px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(87, 118, 86, 0.2);
+}
+
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  position: relative;
+}
+
+.slide:nth-child(1) {
+  background: linear-gradient(rgba(87, 118, 86, 0.7), rgba(118, 163, 126, 0.7)), url('assets/images/slide1.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.slide:nth-child(2) {
+  background: linear-gradient(rgba(87, 118, 86, 0.7), rgba(118, 163, 126, 0.7)), url('assets/images/slide2.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.slide:nth-child(3) {
+  background: linear-gradient(rgba(87, 118, 86, 0.7), rgba(118, 163, 126, 0.7)), url('assets/images/slide3.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.slide.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 0 20px;
+  animation: slideIn 0.8s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.slide p {
+  font-size: 18px;
+  margin-bottom: 28px;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hero-btn {
+  background: white;
+  color: var(--primary);
+  font-size: 16px;
+  padding: 14px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.slide-nav {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.stats-section {
+  background: var(--light);
+  padding: 60px 0;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 20px;
+}
+
+.stat-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.testimonials-section {
+  background: linear-gradient(135deg, var(--light), #f8fffe);
+  padding: 80px 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+  color: var(--accent);
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.testimonial-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(87, 118, 86, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--primary);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(87, 118, 86, 0.15);
+}
+
+.testimonial-content p {
+  font-style: italic;
+  color: var(--accent);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.author-avatar {
+  font-size: 40px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--light);
+  border-radius: 50%;
+}
+
+.author-info h4 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 16px;
+}
+
+.author-info span {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero-buttons {
+    flex-direction: column;
+  }
+  
+  .slide h1 {
+    font-size: 32px;
+  }
+  
+  .slide p {
+    font-size: 16px;
+  }
+  
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">
+                <img src="assets/images/logo.jpg" alt="AgriLane Logo" class="logo-img">
+                <span>AgriLane</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="features.html">Features</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="slideshow-container">
+                <div class="slide active">
+                    <div class="slide-content">
+                        <h1>Smart Farm-to-Customer Transportation</h1>
+                        <p>Direct marketplace connecting farms, transporters, and customers with intelligent route optimization</p>
+                        <div class="hero-buttons">
+                            <a href="login.html" class="btn hero-btn">Get Started</a>
+                            <a href="login.html" class="btn hero-btn">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h1>Optimize Your Delivery Routes</h1>
+                        <p>AI-powered route planning reduces costs and delivery time by up to 40%</p>
+                        <div class="hero-buttons">
+                            <a href="login.html" class="btn hero-btn">Start Planning</a>
+                            <a href="login.html?signup=true" class="btn hero-btn">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h1>Sustainable Road Infrastructure</h1>
+                        <p>Eco-friendly modular road panels made from bamboo and recycled materials</p>
+                        <div class="hero-buttons">
+                            <a href="login.html" class="btn hero-btn">Explore Solutions</a>
+                            <a href="login.html" class="btn hero-btn">Join Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-nav">
+                    <span class="dot active" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Active Farms</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">40%</div>
+                        <div class="stat-label">Cost Reduction</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Deliveries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="testimonials-section">
+            <div class="container">
+                <h2 class="section-title">What Our Users Say</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"AgriLane reduced our delivery costs by 35% and improved customer satisfaction significantly."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">👨‍🌾</div>
+                            <div class="author-info">
+                                <h4>Rajesh Kumar</h4>
+                                <span>Green Valley Farm</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"The route optimization feature saved us hours of planning time every week."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">🚛</div>
+                            <div class="author-info">
+                                <h4>Priya Sharma</h4>
+                                <span>Express Logistics</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"Fresh produce delivered directly from farms to my doorstep. Amazing service!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">👩‍💼</div>
+                            <div class="author-info">
+                                <h4>Anita Patel</h4>
+                                <span>Happy Customer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <footer style="background: var(--accent); color: white; padding: 40px 0; text-align: center;">
+        <div class="container">
+            <p>&copy; 2025 AgriLane. Smart Transportation for Sustainable Agriculture.</p>
+        </div>
+    </footer>
+    
+    <script>
+        let slideIndex = 1;
+        
+        function currentSlide(n) {
+            showSlide(slideIndex = n);
+        }
+        
+        function showSlide(n) {
+            const slides = document.getElementsByClassName('slide');
+            const dots = document.getElementsByClassName('dot');
+            
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove('active');
+            }
+            
+            slides[slideIndex - 1].classList.add('active');
+            dots[slideIndex - 1].classList.add('active');
+        }
+        
+        function nextSlide() {
+            showSlide(slideIndex += 1);
+        }
+        
+        setInterval(nextSlide, 5000);
+        
+        showSlide(slideIndex);
+    </script>
+</body>
+</html>

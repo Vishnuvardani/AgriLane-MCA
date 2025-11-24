@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AgriLane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+  --primary: #577656;
+  --secondary: #76A37E;
+  --accent: #2E4C3A;
+  --light: #E6F0E6;
+  --white: #ffffff;
+  --dark: #1a1a1a;
+  --shadow: rgba(87, 118, 86, 0.1);
+  --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 250px;
+  height: 100vh;
+  background: var(--white);
+  box-shadow: 2px 0 10px var(--shadow);
+  padding: 20px 0;
+  z-index: 90;
+}
+
+.sidebar-nav {
+  list-style: none;
+}
+
+.sidebar-nav li {
+  margin: 8px 0;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  color: var(--dark);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav a:hover {
+  background: var(--light);
+  color: var(--primary);
+}
+
+.main-content {
+  margin-left: 250px;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.page-header h1 {
+  color: var(--primary);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--gradient);
+  color: var(--white);
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.stat-number {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 12px 16px;
+  background: var(--light);
+  color: var(--primary);
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.map-placeholder {
+  height: 200px;
+  background: var(--light);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html">📊 Dashboard</a></li>
+            <li><a href="farms.html">🌾 Farms</a></li>
+            <li><a href="transporters.html">🚛 Transporters</a></li>
+            <li><a href="marketplace.html">🛒 Marketplace</a></li>
+            <li><a href="routes.html">🗺️ Routes</a></li>
+
+            <li><a href="deliveries.html">📦 Deliveries</a></li>
+            <li><a href="reports.html">📈 Reports</a></li>
+            <li><a href="settings.html">⚙️ Settings</a></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header class="page-header">
+            <h1>Dashboard</h1>
+            <div class="user-info">
+                <span id="userRole"></span>
+                <button class="btn btn-primary" onclick="toggleSidebar()">☰</button>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalFarms">0</div>
+                <div class="stat-label">Active Farms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalTransporters">0</div>
+                <div class="stat-label">Transporters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDeliveries">0</div>
+                <div class="stat-label">Deliveries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                <div class="stat-label">Active Orders</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Recent Deliveries</h3>
+                <div class="delivery-list">
+                    <div class="empty-state">
+                        <p>No recent deliveries to display.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Quick Actions</h3>
+                <div class="quick-actions">
+                    <a href="farms.html" class="action-btn">Add Farm</a>
+                    <a href="transporters.html" class="action-btn">Add Transporter</a>
+                    <a href="routes.html" class="action-btn">Plan Route</a>
+                    <a href="marketplace.html" class="action-btn">View Orders</a>
+                </div>
+            </div>
+
+            <div class="card map-card">
+                <h3>Farm & Delivery Map</h3>
+                <div id="mapContainer" class="map-placeholder">
+                    <p>Interactive map showing farm locations and delivery routes</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>System Metrics</h3>
+                <div id="metricsChart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// AgriLane Authentication & Role Management
+function isAuthenticated() {
+    return sessionStorage.getItem('user') !== null;
+}
+
+function getCurrentUser() {
+    const user = sessionStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+}
+
+function isAdmin() {
+    const user = getCurrentUser();
+    return user && user.role === 'admin';
+}
+
+function requireAuth() {
+    if (!isAuthenticated()) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
+function requireAdmin() {
+    if (!requireAuth()) return false;
+    
+    if (!isAdmin()) {
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'dashboard.html';
+        return false;
+    }
+    return true;
+}
+
+function generateNavigation() {
+    const user = getCurrentUser();
+    if (!user) return '';
+    
+    const baseNav = [
+        { href: 'dashboard.html', icon: '📊', text: 'Dashboard' },
+        { href: 'farms.html', icon: '🌾', text: 'Farms' },
+        { href: 'transporters.html', icon: '🚛', text: 'Transporters' },
+        { href: 'marketplace.html', icon: '🛒', text: 'Marketplace' },
+        { href: 'routes.html', icon: '🗺️', text: 'Routes' },
+        { href: 'deliveries.html', icon: '📦', text: 'Deliveries' }
+    ];
+    
+    if (user.role === 'admin') {
+        baseNav.push({ href: 'reports.html', icon: '📈', text: 'Reports' });
+    }
+    
+    baseNav.push(
+        { href: 'settings.html', icon: '⚙️', text: 'Settings' },
+        { href: '#', icon: '🚪', text: 'Logout', onclick: 'logout()' }
+    );
+    
+    return baseNav.map(item => 
+        `<li><a href="${item.href}"${item.onclick ? ` onclick="${item.onclick}"` : ''}>${item.icon} ${item.text}</a></li>`
+    ).join('');
+}
+
+function logout() {
+    sessionStorage.removeItem('user');
+    window.location.href = 'login.html';
+}
+
+// Authentication check
+requireAuth();
+
+// Get user info
+const user = getCurrentUser();
+const userRole = user ? user.role : 'admin';
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar-nav');
+    if (sidebar && isAuthenticated()) {
+        sidebar.innerHTML = generateNavigation();
+    }
+    
+    if (user) {
+        document.getElementById('userRole').textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1) + ' Dashboard';
+    }
+    
+    loadDashboardCounts();
+    setInterval(loadDashboardCounts, 5000); // Update every 5 seconds
+});
+
+async function loadDashboardCounts() {
+    try {
+        const response = await fetch('http://localhost:5000/api/stats');
+        const stats = await response.json();
+        
+        document.getElementById('totalFarms').textContent = stats.totalFarms;
+        document.getElementById('totalTransporters').textContent = stats.totalTransporters;
+        document.getElementById('totalOrders').textContent = stats.totalOrders;
+        document.getElementById('totalDeliveries').textContent = stats.deliveredOrders;
+    } catch (error) {
+        console.error('Error loading dashboard counts:', error);
+    }
+}
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('active');
+}
+    </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map Demo - AgriLane</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="assets/js/mapping.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #E6F0E6;
+        }
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .demo-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .demo-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(87, 118, 86, 0.1);
+        }
+        .demo-map {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(87, 118, 86, 0.1);
+        }
+        #map {
+            height: 500px;
+            border-radius: 8px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #577656, #76A37E);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        input, select {
+            padding: 8px 12px;
+            border: 2px solid #E6F0E6;
+            border-radius: 6px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🗺️ AgriLane Mapping Demo</h1>
+            <p>Leaflet.js + OpenStreetMap + OpenRouteService Integration</p>
+        </div>
+
+        <div class="demo-controls">
+            <h3>Map Controls</h3>
+            <div class="controls-grid">
+                <div>
+                    <label>From City:</label>
+                    <select id="fromCity">
+                        <option value="mumbai">Mumbai</option>
+                        <option value="delhi">Delhi</option>
+                        <option value="bangalore">Bangalore</option>
+                        <option value="pune">Pune</option>
+                        <option value="chennai">Chennai</option>
+                    </select>
+                </div>
+                <div>
+                    <label>To City:</label>
+                    <select id="toCity">
+                        <option value="pune">Pune</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="delhi">Delhi</option>
+                        <option value="bangalore">Bangalore</option>
+                        <option value="chennai">Chennai</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button class="btn" onclick="showRoute()">🚛 Show Route</button>
+                <button class="btn" onclick="addFarmMarkers()">🌾 Show Farms</button>
+                <button class="btn" onclick="clearMap()">🧹 Clear Map</button>
+                <button class="btn" onclick="centerIndia()">🇮🇳 Center India</button>
+            </div>
+        </div>
+
+        <div class="demo-map">
+            <h3>Interactive Map</h3>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <script>
+        let demoMap;
+
+        // Initialize demo
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                demoMap = new AgriLaneMap('map', {
+                    center: [20.5937, 78.9629],
+                    zoom: 5
+                });
+            }, 100);
+        });
+
+        function showRoute() {
+            if (!demoMap) return;
+            
+            const fromCity = document.getElementById('fromCity').value;
+            const toCity = document.getElementById('toCity').value;
+            
+            const fromCoords = demoMap.getCityCoords(fromCity);
+            const toCoords = demoMap.getCityCoords(toCity);
+            
+            const waypoints = [fromCoords, toCoords];
+            const popups = [
+                `Start: ${fromCity.charAt(0).toUpperCase() + fromCity.slice(1)}`,
+                `Destination: ${toCity.charAt(0).toUpperCase() + toCity.slice(1)}`
+            ];
+            
+            demoMap.createRoute(waypoints, { popups });
+            
+            // Show distance
+            const distance = demoMap.calculateDistance(fromCoords, toCoords);
+            const duration = demoMap.estimateDuration(fromCoords, toCoords);
+            
+            alert(`Route: ${distance} km, Estimated time: ${duration} minutes`);
+        }
+
+        function addFarmMarkers() {
+            if (!demoMap) return;
+            
+            const farms = [
+                { name: 'Green Valley Farm', city: 'pune', produce: 'Tomatoes, Onions' },
+                { name: 'Sunrise Organic', city: 'mumbai', produce: 'Leafy Greens' },
+                { name: 'Golden Harvest', city: 'bangalore', produce: 'Rice, Wheat' },
+                { name: 'Fresh Fields', city: 'chennai', produce: 'Coconuts, Bananas' },
+                { name: 'Nature\'s Best', city: 'delhi', produce: 'Potatoes, Carrots' }
+            ];
+            
+            farms.forEach(farm => {
+                const coords = demoMap.getCityCoords(farm.city);
+                demoMap.addMarker(coords.lat, coords.lng, {
+                    popup: `<b>${farm.name}</b><br>Location: ${farm.city}<br>Produce: ${farm.produce}`
+                });
+            });
+        }
+
+        function clearMap() {
+            if (!demoMap) return;
+            demoMap.clearMarkers();
+            if (demoMap.routingControl) {
+                demoMap.map.removeControl(demoMap.routingControl);
+                demoMap.routingControl = null;
+            }
+        }
+
+        function centerIndia() {
+            if (!demoMap) return;
+            demoMap.setView(20.5937, 78.9629, 5);
+        }
+    </script>
+</body>
+</html>

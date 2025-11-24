@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transporter Management - AgriLane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+  --primary: #577656;
+  --secondary: #76A37E;
+  --accent: #2E4C3A;
+  --light: #E6F0E6;
+  --white: #ffffff;
+  --dark: #1a1a1a;
+  --shadow: rgba(87, 118, 86, 0.1);
+  --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  line-height: 1.6;
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: var(--white);
+  box-shadow: 2px 0 10px var(--shadow);
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 20px 0;
+}
+
+.sidebar-nav li {
+  margin: 0;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 15px 25px;
+  color: var(--dark);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  background: var(--light);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 250px;
+  padding: 30px;
+  background: var(--light);
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.header-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h1 {
+  font-size: 32px;
+  color: var(--accent);
+  margin: 0;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.transporters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.transporter-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.transporter-card:hover {
+  transform: translateY(-5px);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  grid-column: 1 / -1;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--light);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html">📊 Dashboard</a></li>
+            <li><a href="farms.html">🌾 Farms</a></li>
+            <li><a href="transporters.html">🚛 Transporters</a></li>
+            <li><a href="marketplace.html">🛒 Marketplace</a></li>
+            <li><a href="routes.html">🗺️ Routes</a></li>
+
+            <li><a href="deliveries.html">📦 Deliveries</a></li>
+            <li><a href="reports.html">📈 Reports</a></li>
+            <li><a href="settings.html">⚙️ Settings</a></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header class="page-header">
+            <div class="header-title-row">
+                <h1>Transporter & Vehicle Management</h1>
+                <button class="btn btn-primary" onclick="openAddTransporterModal()">Add Transporter</button>
+            </div>
+        </header>
+
+        <div class="transporters-grid">
+            <div class="empty-state">
+                <p>No transporters added yet. Click "Add Transporter" to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="addTransporterModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Add New Transporter</h2>
+            <form id="addTransporterForm">
+                <div class="form-group">
+                    <label class="form-label">Company Name</label>
+                    <input type="text" id="companyName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Driver Name</label>
+                    <input type="text" id="driverName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Vehicle Type</label>
+                    <select id="vehicleType" class="form-input" required>
+                        <option value="">Select Type</option>
+                        <option value="truck">Truck</option>
+                        <option value="van">Van</option>
+                        <option value="pickup">Pickup</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Capacity (tons)</label>
+                    <input type="number" id="capacity" class="form-input" min="0.5" step="0.5" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contact Number</label>
+                    <input type="tel" id="contactNumber" class="form-input" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeAddTransporterModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Transporter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// AgriLane Authentication & Role Management
+function isAuthenticated() {
+    return sessionStorage.getItem('user') !== null;
+}
+
+function getCurrentUser() {
+    const user = sessionStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+}
+
+function isAdmin() {
+    const user = getCurrentUser();
+    return user && user.role === 'admin';
+}
+
+function requireAuth() {
+    if (!isAuthenticated()) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
+function requireAdmin() {
+    if (!requireAuth()) return false;
+    
+    if (!isAdmin()) {
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'dashboard.html';
+        return false;
+    }
+    return true;
+}
+
+function generateNavigation() {
+    const user = getCurrentUser();
+    if (!user) return '';
+    
+    const baseNav = [
+        { href: 'dashboard.html', icon: '📊', text: 'Dashboard' },
+        { href: 'farms.html', icon: '🌾', text: 'Farms' },
+        { href: 'transporters.html', icon: '🚛', text: 'Transporters' },
+        { href: 'marketplace.html', icon: '🛒', text: 'Marketplace' },
+        { href: 'routes.html', icon: '🗺️', text: 'Routes' },
+        { href: 'deliveries.html', icon: '📦', text: 'Deliveries' }
+    ];
+    
+    if (user.role === 'admin') {
+        baseNav.push({ href: 'reports.html', icon: '📈', text: 'Reports' });
+    }
+    
+    baseNav.push(
+        { href: 'settings.html', icon: '⚙️', text: 'Settings' },
+        { href: '#', icon: '🚪', text: 'Logout', onclick: 'logout()' }
+    );
+    
+    return baseNav.map(item => 
+        `<li><a href="${item.href}"${item.onclick ? ` onclick="${item.onclick}"` : ''}>${item.icon} ${item.text}</a></li>`
+    ).join('');
+}
+
+function logout() {
+    sessionStorage.removeItem('user');
+    window.location.href = 'login.html';
+}
+
+// Authentication check
+requireAuth();
+
+function openAddTransporterModal() {
+    document.getElementById('addTransporterModal').classList.remove('hidden');
+}
+
+function closeAddTransporterModal() {
+    document.getElementById('addTransporterModal').classList.add('hidden');
+    document.getElementById('addTransporterForm').reset();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar-nav');
+    if (sidebar && isAuthenticated()) {
+        sidebar.innerHTML = generateNavigation();
+    }
+    
+    // Add transporter form handler
+    document.getElementById('addTransporterForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const user = getCurrentUser();
+        const transporterData = {
+            company: document.getElementById('companyName').value,
+            driver: document.getElementById('driverName').value,
+            vehicleType: document.getElementById('vehicleType').value,
+            capacity: parseFloat(document.getElementById('capacity').value),
+            contact: document.getElementById('contactNumber').value,
+            owner: user.id
+        };
+        
+        try {
+            const response = await fetch('http://localhost:5000/api/transporters', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(transporterData)
+            });
+            
+            if (response.ok) {
+                alert('Transporter added successfully!');
+                closeAddTransporterModal();
+                loadTransporters();
+            } else {
+                alert('Failed to add transporter');
+            }
+        } catch (error) {
+            alert('Connection error');
+        }
+    });
+    
+    loadTransporters();
+});
+
+async function loadTransporters() {
+    try {
+        const response = await fetch('http://localhost:5000/api/transporters');
+        const transporters = await response.json();
+        
+        const transportersGrid = document.querySelector('.transporters-grid');
+        if (transporters.length === 0) {
+            transportersGrid.innerHTML = '<div class="empty-state"><p>No transporters added yet. Click "Add Transporter" to get started.</p></div>';
+        } else {
+            transportersGrid.innerHTML = transporters.map(transporter => `
+                <div class="transporter-card">
+                    <h3>${transporter.company}</h3>
+                    <p><strong>Driver:</strong> ${transporter.driver}</p>
+                    <p><strong>Vehicle:</strong> ${transporter.vehicleType}</p>
+                    <p><strong>Capacity:</strong> ${transporter.capacity} tons</p>
+                    <p><strong>Contact:</strong> ${transporter.contact}</p>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error loading transporters:', error);
+    }
+}
+    </script>
+</body>
+</html>

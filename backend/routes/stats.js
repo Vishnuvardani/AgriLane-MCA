@@ -1,0 +1,29 @@
+const express = require('express');
+const User = require('../models/User');
+const Farm = require('../models/Farm');
+const Transporter = require('../models/Transporter');
+const Order = require('../models/Order');
+const Route = require('../models/Route');
+const router = express.Router();
+
+// Get all counts
+router.get('/', async (req, res) => {
+  try {
+    const stats = {
+      totalUsers: await User.countDocuments(),
+      totalFarms: await Farm.countDocuments(),
+      totalTransporters: await Transporter.countDocuments(),
+      totalOrders: await Order.countDocuments(),
+      totalRoutes: await Route.countDocuments(),
+      deliveredOrders: await Order.countDocuments({ status: 'delivered' }),
+      pendingOrders: await Order.countDocuments({ status: 'pending' }),
+      activeTransporters: await Transporter.countDocuments({ status: 'available' })
+    };
+    
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;

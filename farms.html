@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Management - AgriLane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+  --primary: #577656;
+  --secondary: #76A37E;
+  --accent: #2E4C3A;
+  --light: #E6F0E6;
+  --white: #ffffff;
+  --dark: #1a1a1a;
+  --shadow: rgba(87, 118, 86, 0.1);
+  --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  --glass: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  line-height: 1.6;
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: var(--white);
+  box-shadow: 2px 0 10px var(--shadow);
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 20px 0;
+}
+
+.sidebar-nav li {
+  margin: 0;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 15px 25px;
+  color: var(--dark);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  background: var(--light);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 250px;
+  padding: 30px;
+  background: var(--light);
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.header-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h1 {
+  font-size: 32px;
+  color: var(--accent);
+  margin: 0;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.farms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.farm-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.farm-card:hover {
+  transform: translateY(-5px);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  grid-column: 1 / -1;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--light);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html">📊 Dashboard</a></li>
+            <li><a href="farms.html">🌾 Farms</a></li>
+            <li><a href="transporters.html">🚛 Transporters</a></li>
+            <li><a href="marketplace.html">🛒 Marketplace</a></li>
+            <li><a href="routes.html">🗺️ Routes</a></li>
+
+            <li><a href="deliveries.html">📦 Deliveries</a></li>
+            <li><a href="reports.html">📈 Reports</a></li>
+            <li><a href="settings.html">⚙️ Settings</a></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header class="page-header">
+            <div class="header-title-row">
+                <h1>Farm Management</h1>
+                <button class="btn btn-primary" onclick="openAddFarmModal()">Add New Farm</button>
+            </div>
+        </header>
+
+        <div class="farms-grid" id="farmsGrid">
+            <div class="empty-state">
+                <p>No farms added yet. Click "Add New Farm" to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Farm Modal -->
+    <div id="addFarmModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Add New Farm</h2>
+            <form id="addFarmForm">
+                <div class="form-group">
+                    <label class="form-label">Farm Name</label>
+                    <input type="text" id="farmName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" id="farmLocation" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Produce Type</label>
+                    <input type="text" id="produceType" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Stock</label>
+                    <textarea id="currentStock" class="form-input" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeAddFarmModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Farm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// AgriLane Authentication & Role Management
+function isAuthenticated() {
+    return sessionStorage.getItem('user') !== null;
+}
+
+function getCurrentUser() {
+    const user = sessionStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+}
+
+function isAdmin() {
+    const user = getCurrentUser();
+    return user && user.role === 'admin';
+}
+
+function requireAuth() {
+    if (!isAuthenticated()) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
+function requireAdmin() {
+    if (!requireAuth()) return false;
+    
+    if (!isAdmin()) {
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'dashboard.html';
+        return false;
+    }
+    return true;
+}
+
+function generateNavigation() {
+    const user = getCurrentUser();
+    if (!user) return '';
+    
+    const baseNav = [
+        { href: 'dashboard.html', icon: '📊', text: 'Dashboard' },
+        { href: 'farms.html', icon: '🌾', text: 'Farms' },
+        { href: 'transporters.html', icon: '🚛', text: 'Transporters' },
+        { href: 'marketplace.html', icon: '🛒', text: 'Marketplace' },
+        { href: 'routes.html', icon: '🗺️', text: 'Routes' },
+        { href: 'deliveries.html', icon: '📦', text: 'Deliveries' }
+    ];
+    
+    if (user.role === 'admin') {
+        baseNav.push({ href: 'reports.html', icon: '📈', text: 'Reports' });
+    }
+    
+    baseNav.push(
+        { href: 'settings.html', icon: '⚙️', text: 'Settings' },
+        { href: '#', icon: '🚪', text: 'Logout', onclick: 'logout()' }
+    );
+    
+    return baseNav.map(item => 
+        `<li><a href="${item.href}"${item.onclick ? ` onclick="${item.onclick}"` : ''}>${item.icon} ${item.text}</a></li>`
+    ).join('');
+}
+
+function logout() {
+    sessionStorage.removeItem('user');
+    window.location.href = 'login.html';
+}
+
+// Authentication check
+requireAuth();
+
+function openAddFarmModal() {
+    document.getElementById('addFarmModal').classList.remove('hidden');
+}
+
+function closeAddFarmModal() {
+    document.getElementById('addFarmModal').classList.add('hidden');
+    document.getElementById('addFarmForm').reset();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar-nav');
+    if (sidebar && isAuthenticated()) {
+        sidebar.innerHTML = generateNavigation();
+    }
+    
+    // Add farm form handler
+    document.getElementById('addFarmForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const user = getCurrentUser();
+        const farmData = {
+            name: document.getElementById('farmName').value,
+            location: document.getElementById('farmLocation').value,
+            produce: document.getElementById('produceType').value.split(',').map(p => p.trim()),
+            stock: [{
+                item: document.getElementById('produceType').value,
+                quantity: parseInt(document.getElementById('currentStock').value) || 0,
+                unit: 'kg',
+                price: 0
+            }],
+            owner: user.id,
+            contact: user.phone || ''
+        };
+        
+        try {
+            const response = await fetch('http://localhost:5000/api/farms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(farmData)
+            });
+            
+            if (response.ok) {
+                alert('Farm added successfully!');
+                closeAddFarmModal();
+                loadFarms();
+            } else {
+                alert('Failed to add farm');
+            }
+        } catch (error) {
+            alert('Connection error');
+        }
+    });
+    
+    loadFarms();
+});
+
+async function loadFarms() {
+    try {
+        const response = await fetch('http://localhost:5000/api/farms');
+        const farms = await response.json();
+        
+        const farmsGrid = document.getElementById('farmsGrid');
+        if (farms.length === 0) {
+            farmsGrid.innerHTML = '<div class="empty-state"><p>No farms added yet. Click "Add New Farm" to get started.</p></div>';
+        } else {
+            farmsGrid.innerHTML = farms.map(farm => `
+                <div class="farm-card">
+                    <h3>${farm.name}</h3>
+                    <p><strong>Location:</strong> ${farm.location}</p>
+                    <p><strong>Produce:</strong> ${farm.produce.join(', ')}</p>
+                    <p><strong>Owner:</strong> ${farm.owner?.name || 'Unknown'}</p>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error loading farms:', error);
+    }
+}
+    </script>
+</body>
+</html>

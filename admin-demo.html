@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access Demo - AgriLane</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #E6F0E6;
+        }
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(87, 118, 86, 0.1);
+        }
+        .user-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #577656;
+        }
+        .btn {
+            background: linear-gradient(135deg, #577656, #76A37E);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .admin { background: #d4edda; color: #155724; }
+        .user { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🔐 Admin Access Control Demo</h1>
+        <p>Test role-based access to the Reports page:</p>
+
+        <div class="user-card">
+            <h3>👨‍💼 Admin User</h3>
+            <p><strong>Email:</strong> admin@agrilane.com</p>
+            <p><strong>Role:</strong> <span class="status admin">ADMIN</span></p>
+            <p><strong>Access:</strong> Can view Reports page</p>
+            <button class="btn" onclick="loginAs('admin')">Login as Admin</button>
+        </div>
+
+        <div class="user-card">
+            <h3>👨‍🌾 Farmer User</h3>
+            <p><strong>Email:</strong> farmer@agrilane.com</p>
+            <p><strong>Role:</strong> <span class="status user">FARMER</span></p>
+            <p><strong>Access:</strong> Cannot view Reports page</p>
+            <button class="btn" onclick="loginAs('farmer')">Login as Farmer</button>
+        </div>
+
+        <div class="user-card">
+            <h3>🚛 Transporter User</h3>
+            <p><strong>Email:</strong> transporter@agrilane.com</p>
+            <p><strong>Role:</strong> <span class="status user">TRANSPORTER</span></p>
+            <p><strong>Access:</strong> Cannot view Reports page</p>
+            <button class="btn" onclick="loginAs('transporter')">Login as Transporter</button>
+        </div>
+
+        <div class="user-card">
+            <h3>🛒 Customer User</h3>
+            <p><strong>Email:</strong> customer@agrilane.com</p>
+            <p><strong>Role:</strong> <span class="status user">CUSTOMER</span></p>
+            <p><strong>Access:</strong> Cannot view Reports page</p>
+            <button class="btn" onclick="loginAs('customer')">Login as Customer</button>
+        </div>
+
+        <hr style="margin: 30px 0;">
+        
+        <h3>Test Access:</h3>
+        <button class="btn" onclick="testReportsAccess()">🔍 Try to Access Reports</button>
+        <button class="btn" onclick="goToDashboard()">📊 Go to Dashboard</button>
+        <button class="btn" onclick="logout()">🚪 Logout</button>
+
+        <div id="currentUser" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+            <strong>Current User:</strong> <span id="userInfo">Not logged in</span>
+        </div>
+    </div>
+
+    <script>
+        function loginAs(role) {
+            const users = {
+                admin: {
+                    email: 'admin@agrilane.com',
+                    role: 'admin',
+                    name: 'Admin User'
+                },
+                farmer: {
+                    email: 'farmer@agrilane.com',
+                    role: 'farmer',
+                    name: 'Farmer User'
+                },
+                transporter: {
+                    email: 'transporter@agrilane.com',
+                    role: 'transporter',
+                    name: 'Transporter User'
+                },
+                customer: {
+                    email: 'customer@agrilane.com',
+                    role: 'customer',
+                    name: 'Customer User'
+                }
+            };
+
+            const user = users[role];
+            sessionStorage.setItem('user', JSON.stringify(user));
+            updateUserDisplay();
+            alert(`Logged in as ${user.name} (${user.role})`);
+        }
+
+        function testReportsAccess() {
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            
+            if (!user.role) {
+                alert('Please login first!');
+                return;
+            }
+
+            if (user.role === 'admin') {
+                alert('✅ Access granted! Redirecting to Reports page...');
+                window.location.href = 'reports.html';
+            } else {
+                alert('❌ Access denied! Admin privileges required.');
+            }
+        }
+
+        function goToDashboard() {
+            if (!sessionStorage.getItem('user')) {
+                alert('Please login first!');
+                return;
+            }
+            window.location.href = 'dashboard.html';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('user');
+            updateUserDisplay();
+            alert('Logged out successfully!');
+        }
+
+        function updateUserDisplay() {
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            const userInfo = document.getElementById('userInfo');
+            
+            if (user.role) {
+                userInfo.innerHTML = `${user.name} (${user.email}) - Role: <span class="status ${user.role === 'admin' ? 'admin' : 'user'}">${user.role.toUpperCase()}</span>`;
+            } else {
+                userInfo.textContent = 'Not logged in';
+            }
+        }
+
+        // Initialize display
+        updateUserDisplay();
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Green Valley Farm",
+    "location": "Rural District A",
+    "coordinates": { "lat": 40.7128, "lng": -74.0060 },
+    "produce": ["Tomatoes", "Lettuce", "Cucumbers"],
+    "stock": {
+      "Tomatoes": { "quantity": 500, "unit": "kg", "price": 3.50 },
+      "Lettuce": { "quantity": 200, "unit": "kg", "price": 2.80 },
+      "Cucumbers": { "quantity": 150, "unit": "kg", "price": 2.20 }
+    },
+    "status": "available",
+    "owner": "farmer@agrilane.com",
+    "contact": "+1-555-0123"
+  },
+  {
+    "id": 2,
+    "name": "Sunrise Organic",
+    "location": "Rural District B",
+    "coordinates": { "lat": 40.7589, "lng": -73.9851 },
+    "produce": ["Carrots", "Potatoes", "Onions"],
+    "stock": {
+      "Carrots": { "quantity": 300, "unit": "kg", "price": 2.20 },
+      "Potatoes": { "quantity": 800, "unit": "kg", "price": 1.90 },
+      "Onions": { "quantity": 250, "unit": "kg", "price": 2.50 }
+    },
+    "status": "pending",
+    "owner": "farmer@agrilane.com",
+    "contact": "+1-555-0456"
+  }
+]
