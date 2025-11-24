@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: agrilane-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: agrilane
+
+  backend:
+    build: .
+    container_name: agrilane-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/agrilane
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  frontend:
+    image: nginx:alpine
+    container_name: agrilane-frontend
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html
+    depends_on:
+      - backend
+
+volumes:
+  mongodb_data:
